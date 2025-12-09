@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laura's Letta Wrapped 2025 🎉</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Circular+Sp:wght@400;700;900&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Circular Sp', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #1a0b2e 0%, #2d1b4e 50%, #1a0b2e 100%);
+      color: white;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      height: 100vh;
+      overflow-y: scroll;
+    }
+    
+    .slide {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      scroll-snap-align: start;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    .slide-1 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .slide-2 {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .slide-3 {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .slide-4 {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    
+    .slide-5 {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+    
+    .slide-6 {
+      background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    }
+    
+    .slide-7 {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+    
+    .slide-8 {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    }
+    
+    h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-align: center;
+      line-height: 1.2;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .stat {
+      font-size: 6rem;
+      font-weight: 900;
+      margin: 30px 0;
+      text-align: center;
+      text-shadow: 0 6px 30px rgba(0,0,0,0.4);
+      animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+    
+    .subtitle {
+      font-size: 1.8rem;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+    
+    .list {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      line-height: 2;
+      text-align: left;
+      max-width: 800px;
+    }
+    
+    .list-item {
+      padding: 15px;
+      margin: 10px 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      animation: slideInLeft 0.6s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .list-item:nth-child(1) { animation-delay: 0.1s; }
+    .list-item:nth-child(2) { animation-delay: 0.2s; }
+    .list-item:nth-child(3) { animation-delay: 0.3s; }
+    .list-item:nth-child(4) { animation-delay: 0.4s; }
+    .list-item:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .emoji {
+      font-size: 5rem;
+      margin-bottom: 30px;
+      animation: bounce 1s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .highlight {
+      color: #fff200;
+      font-weight: 900;
+    }
+    
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      font-size: 1rem;
+      opacity: 0.6;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    
+    .year {
+      font-size: 8rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #fff, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.8rem; }
+      .stat { font-size: 4rem; }
+      .subtitle { font-size: 1.3rem; }
+      .list { font-size: 1.2rem; }
+      .year { font-size: 5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Slide 1: Welcome -->
+<div class="slide slide-1">
+  <div class="emoji">🎉</div>
+  <h1>Laura's Letta Wrapped</h1>
+  <div class="year">2025</div>
+  <p class="scroll-hint">↓ Scroll down ↓</p>
+</div>
+
+<!-- Slide 2: Tools Created -->
+<div class="slide slide-2">
+  <h2>You Built</h2>
+  <div class="stat">10</div>
+  <div class="subtitle">Custom Tools</div>
+  <p style="font-size: 1.2rem; margin-top: 30px; text-align: center; max-width: 600px;">
+    From meta-tooling infrastructure to GitHub automation, you built an entire development ecosystem
+  </p>
+</div>
+
+<!-- Slide 3: Top Tools -->
+<div class="slide slide-3">
+  <h2>Your Greatest Hits 🔧</h2>
+  <div class="list">
+    <div class="list-item">🛠️ <strong>create_letta_tool</strong> - Build tools that build tools</div>
+    <div class="list-item">🤖 <strong>create_letta_agent</strong> - AI that creates AI</div>
+    <div class="list-item">🔍 <strong>get_letta_tool</strong> - Full tool introspection</div>
+    <div class="list-item">✏️ <strong>edit_letta_tool</strong> - Live tool editing</div>
+    <div class="list-item">🌐 <strong>update_github_pages_html</strong> - One-click deployments</div>
+  </div>
+</div>
+
+<!-- Slide 4: Agents Created -->
+<div class="slide slide-4">
+  <h2>Agents You Brought to Life</h2>
+  <div class="stat">3+</div>
+  <div class="subtitle">AI Agents</div>
+  <div class="list" style="margin-top: 40px;">
+    <div class="list-item">🔬 <strong>Validation-Pipeline-Agent</strong> - Customer research automation</div>
+    <div class="list-item">📊 <strong>Erica-Summarizer</strong> - 19-team status aggregator</div>
+    <div class="list-item">🌙 <strong>OCF System</strong> - Overnight Co-Founder (AI building AI)</div>
+  </div>
+</div>
+
+<!-- Slide 5: Biggest Breakthrough -->
+<div class="slide slide-5">
+  <div class="emoji">🚀</div>
+  <h2>Your Biggest Breakthrough</h2>
+  <h1 style="font-size: 2.5rem; max-width: 900px;">
+    Meta-Tooling Architecture: Agents that create, inspect, and edit their own tools
+  </h1>
+  <p class="subtitle" style="margin-top: 30px;">
+    Complete CRUD operations on Letta infrastructure 🤯
+  </p>
+</div>
+
+<!-- Slide 6: Product-Market Fit -->
+<div class="slide slide-6">
+  <h2>LaunchMate User Survey</h2>
+  <div class="stat">67%</div>
+  <div class="subtitle">Would be disappointed if LaunchMate stopped</div>
+  <p style="font-size: 1.5rem; margin-top: 40px; text-align: center;">
+    You validated <span class="highlight">product-market fit</span> 🎯
+  </p>
+</div>
+
+<!-- Slide 7: Technical Wins -->
+<div class="slide slide-7">
+  <h2>This Year You...</h2>
+  <div class="list">
+    <div class="list-item">✅ Deployed GitHub Pages automation system</div>
+    <div class="list-item">✅ Built team pulse notification infrastructure</div>
+    <div class="list-item">✅ Created Discord integration for real-time updates</div>
+    <div class="list-item">✅ Migrated entire toolset to Letta v1 architecture</div>
+    <div class="list-item">✅ Implemented environment variable security patterns</div>
+  </div>
+</div>
+
+<!-- Slide 8: Final Message -->
+<div class="slide slide-8">
+  <div class="emoji">💜</div>
+  <h1 style="font-size: 3rem; max-width: 800px;">
+    From validation avoidance to validation automation
+  </h1>
+  <p class="subtitle" style="max-width: 700px; margin-top: 40px;">
+    You didn't just build LaunchMate—you built the infrastructure to build anything
+  </p>
+  <div style="margin-top: 60px; font-size: 1.3rem; opacity: 0.8;">
+    Here's to 2025 🥂
+  </div>
+</div>
+
+<script>
+  // Add smooth scroll behavior
+  document.addEventListener('DOMContentLoaded', () => {
+    const slides = document.querySelectorAll('.slide');
+    slides.forEach((slide, index) => {
+      slide.style.animationDelay = `${index * 0.1}s`;
+    });
+  });
+</script>
+
+</body>
+</html>
