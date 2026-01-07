@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's Wrong with the Neal Test Tool | Critical Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .page-content ul {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .page-content li {
+            margin-bottom: 0.8em;
+            color: #b0b0b0;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .problem-box {
+            background: #1f0f0f;
+            border: 2px solid #f97316;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .problem-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f97316;
+            margin-bottom: 12px;
+        }
+
+        .problem-box .text {
+            color: #fecaca;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .example-box {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .example-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .example-box .content {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .comparison-card.bad {
+            border-color: #f97316;
+        }
+
+        .comparison-card.good {
+            border-color: #34d399;
+        }
+
+        .comparison-card .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .comparison-card.bad .title {
+            color: #f97316;
+        }
+
+        .comparison-card.good .title {
+            color: #34d399;
+        }
+
+        .comparison-card .text {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .solution-box {
+            background: #0f1f0f;
+            border: 1px solid #1a3d1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .solution-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #34d399;
+            margin-bottom: 12px;
+        }
+
+        .solution-box .text {
+            color: #d1fae5;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #2e1a1a 0%, #3f1e1e 100%);
+            border-color: #f97316;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #fca5a5;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+            background: linear-gradient(135deg, #0f1a1a 0%, #1a2f2f 100%);
+            border-color: #2a4a4a;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">Critical Analysis</p>
+            <h1 class="page-title">What's Wrong with the Neal Test Tool</h1>
+            <p class="subtitle">Why it feels too templated and how to fix it</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 1: The Problem -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Core Issue</p>
+            <h2 class="page-title">It's too pre-formatted</h2>
+            <div class="page-content">
+                <p>I ran LaunchMate through the Neal Test tool and realized: <span class="tension">the output feels like Mad Libs.</span></p>
+                <p>Every scenario has the same structure:</p>
+                <div class="example-box">
+                    <div class="label">The Pattern (Every Time)</div>
+                    <div class="content">
+                        "Text each paying customer at 8-9am...<br>
+                        Process responses at 12-1pm...<br>
+                        Send feedback at 6-7pm...<br>
+                        $30-50/week via Venmo"
+                    </div>
+                </div>
+                <p>It just <span class="highlight">fills in different nouns</span> based on your startup description. Accountability coach, personal coordinator, matchmaker—but the pattern is identical.</p>
+                <p><span class="tension">That's not creative. That's a template.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/8</span>
+        </div>
+    </section>
+
+    <!-- Page 2: Examples of Sameness -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Evidence</p>
+            <h2 class="page-title">Every scenario sounds the same</h2>
+            <div class="page-content">
+                <p><span class="highlight">Scenario 1:</span> "Daily Manual Service"</p>
+                <p style="font-size: 0.95rem; color: #9ca3af; margin-left: 1em; font-style: italic;">"Text each founder daily check-ins, process responses manually, send personalized feedback"</p>
+                
+                <p style="margin-top: 1em;"><span class="highlight">Scenario 2:</span> "On-Call Service"</p>
+                <p style="font-size: 0.95rem; color: #9ca3af; margin-left: 1em; font-style: italic;">"Text me whenever you need help, I'll respond within 30 minutes, 9am-9pm availability"</p>
+                
+                <p style="margin-top: 1em;"><span class="highlight">Scenario 5:</span> "Pop-Up Service Event"</p>
+                <p style="font-size: 0.95rem; color: #9ca3af; margin-left: 1em; font-style: italic;">"Set up at campus, $15 immediate service, hand them a card for weekly subscription"</p>
+            </div>
+            <div class="problem-box" style="margin-top: 1.5em;">
+                <div class="label">The Problem</div>
+                <div class="text">These aren't novel solutions. They're slight variations of "be a service provider, charge money, repeat." There's no creativity here.</div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/8</span>
+        </div>
+    </section>
+
+    <!-- Page 3: What's Missing -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Gap</p>
+            <h2 class="page-title">It's missing context-specific creativity</h2>
+            <div class="page-content">
+                <p>The tool <span class="tension">doesn't actually analyze your startup.</span> It pattern-matches keywords:</p>
+                <ul>
+                    <li>Sees "accountability" → outputs "accountability coach"</li>
+                    <li>Sees "coordinate" → outputs "personal coordinator"</li>
+                    <li>Sees "track" → outputs "personal tracker"</li>
+                </ul>
+                <p style="margin-top: 1.5em;"><span class="highlight">What it should do instead:</span></p>
+                <p>Analyze the <span class="decision">unique aspects</span> of your specific startup and generate scenarios that are <span class="decision">non-obvious and tailored.</span></p>
+                <p>Not "be an accountability coach for $40/week." That's obvious.</p>
+                <p>More like: <span class="decision">"Run a 7-day founder bootcamp where you live in a house with 3 founders and manually keep them on track 24/7. Charge $500. Learn what real accountability looks like under pressure."</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/8</span>
+        </div>
+    </section>
+
+    <!-- Page 4: Generic vs Specific -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Comparison</p>
+            <h2 class="page-title">Generic vs actually creative</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card bad">
+                    <div class="title">❌ Current Tool</div>
+                    <div class="text">"Text 5 founders daily check-ins. $40/week. Track responses in spreadsheet. Send feedback at 6pm."</div>
+                </div>
+                <div class="comparison-card good">
+                    <div class="title">✅ Creative Alternative</div>
+                    <div class="text">"Shadow 2 founders for an entire week. Film their work sessions. At night, edit a 3-min highlight reel showing what they actually did vs what they said they'd do. Charge $200 for brutal honesty."</div>
+                </div>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card bad">
+                    <div class="title">❌ Current Tool</div>
+                    <div class="text">"Set up at campus library. $15 spot service. Hand out cards for weekly subscription."</div>
+                </div>
+                <div class="comparison-card good">
+                    <div class="title">✅ Creative Alternative</div>
+                    <div class="text">"Crash 3 startup pitch events uninvited. Approach founders after their pitch. Offer on-the-spot validation: 'I'll call 5 potential customers right now and see if your idea is real. $50.' Do it live."</div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/8</span>
+        </div>
+    </section>
+
+    <!-- Page 5: The Trade-off I Made -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Design Decision</p>
+            <h2 class="page-title">Why I chose concrete over creative</h2>
+            <div class="page-content">
+                <p>I made a deliberate trade-off when building this tool:</p>
+                <p><span class="decision">Concrete + actionable + boring</span><br>beats<br><span class="tension">Creative + vague + inspiring</span></p>
+                <p style="margin-top: 1.5em;">Founders don't execute vague advice. They <span class="highlight">do</span> execute "text 5 people by Wednesday at 8am."</p>
+                <p>I optimized for <span class="decision">reducing friction</span> over inspiring creativity.</p>
+                <div class="problem-box" style="margin-top: 1.5em;">
+                    <div class="label">But I Was Wrong</div>
+                    <div class="text">The tool is SO concrete that it's boring. Founders read it and think "yeah, I could do that" but they don't get EXCITED. It doesn't spark new thinking.</div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/8</span>
+        </div>
+    </section>
+
+    <!-- Page 6: What Good Looks Like -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Goal</p>
+            <h2 class="page-title">What a better tool would generate</h2>
+            <div class="page-content">
+                <p>For <span class="highlight">LaunchMate</span> (AI accountability platform), instead of:</p>
+                <div class="example-box">
+                    <div class="label">❌ Current Output</div>
+                    <div class="content">"Text founders daily check-ins. $40/week. Process responses in spreadsheet."</div>
+                </div>
+                <p style="margin-top: 1em;">It should generate:</p>
+                <div class="solution-box">
+                    <div class="label">✅ Creative Scenarios</div>
+                    <div class="text">
+                        <strong>1. The Accountability House:</strong> Rent an Airbnb for a week. Invite 4 founders to live there. You're the live-in coach. Wake them at 6am with check-ins. Track every hour. No tech—just you and a whiteboard. $600/founder. Learn what accountability ACTUALLY requires.<br><br>
+                        <strong>2. The Validation Sprint:</strong> Founders pay you $100. You spend Friday physically following them and forcing them to talk to 10 users. You block their calendar. You drag them to coffee shops. Manual, aggressive user research. Film it.<br><br>
+                        <strong>3. Public Progress Board:</strong> Set up a giant whiteboard at a coworking space. 5 founders pay $30/week. Every morning you update their progress publicly. Anyone can see if they're slipping. Social pressure as accountability. Manual daily updates.
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/8</span>
+        </div>
+    </section>
+
+    <!-- Page 7: How to Fix It -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Solution</p>
+            <h2 class="page-title">How to rebuild the tool</h2>
+            <div class="page-content">
+                <p><span class="decision">Option 1: Use a better LLM with better prompting</span></p>
+                <p style="margin-left: 1em; font-size: 0.95rem; color: #9ca3af;">Instead of templated if/else logic, use GPT-4 or Claude with a prompt like: "Generate 5 NOVEL, NON-OBVIOUS manual service scenarios. Each must be specific, creative, and something the founder wouldn't think of themselves."</p>
+                
+                <p style="margin-top: 1.5em;"><span class="decision">Option 2: Add startup-specific context analysis</span></p>
+                <p style="margin-left: 1em; font-size: 0.95rem; color: #9ca3af;">Analyze their target market, problem space, and unique constraints. Generate scenarios that leverage their specific situation. Not generic "accountability coach" but "what manual accountability looks like for THIS specific founder type."</p>
+                
+                <p style="margin-top: 1.5em;"><span class="decision">Option 3: Hybrid approach</span></p>
+                <p style="margin-left: 1em; font-size: 0.95rem; color: #9ca3af;">Keep 2-3 concrete, actionable scenarios (the boring but executable ones). Add 2-3 creative, non-obvious scenarios that spark new thinking. Best of both worlds.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">7/8</span>
+        </div>
+    </section>
+
+    <!-- Page 8: Final -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">The Core Issue</p>
+            <h2 class="page-title">Templates don't inspire action</h2>
+            <div class="page-content">
+                <p class="quote">"A good Neal Test scenario should make you think: 'Holy shit, I never would have thought of that. But I HAVE to try it.'"</p>
+                <p style="margin-top: 1.5em; text-align: left;">The current tool makes you think: <span class="tension">"Yeah, I could text some people. But I probably won't."</span></p>
+                <p style="text-align: left; margin-top: 1em;">A better tool makes you think: <span class="decision">"Wait, I could actually DO that? That's wild. Let me try."</span></p>
+                <p style="margin-top: 1.5em; text-align: left;"><span class="highlight">The fix:</span> Replace templated logic with creative prompting. Generate scenarios that are <span class="decision">specific, novel, and exciting</span> instead of safe and boring.</p>
+                <p style="margin-top: 1.5em; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">Tools should spark action, not just provide instructions. Time to rebuild this one. 🔧</p>
+            </div>
+            <span class="page-number">8/8</span>
+        </div>
+    </section>
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
