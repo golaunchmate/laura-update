@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neal Test Tool | LaunchMate's Validation Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .page-content ul {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .page-content li {
+            margin-bottom: 0.8em;
+            color: #b0b0b0;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .formula-box {
+            background: #0f1f0f;
+            border: 1px solid #1a3d1a;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .formula-box .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #34d399;
+            margin-bottom: 16px;
+        }
+
+        .formula-box .formula {
+            font-size: 1.3rem;
+            color: #d1fae5;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .scenario-grid {
+            display: grid;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .scenario-card {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            border-color: #60a5fa;
+        }
+
+        .scenario-card .number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #60a5fa;
+            margin-bottom: 6px;
+        }
+
+        .scenario-card .name {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .scenario-card .description {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .code-example {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .code-example .prompt {
+            color: #f97316;
+        }
+
+        .code-example .output {
+            color: #34d399;
+        }
+
+        .comparison-box {
+            background: #1f1f0f;
+            border: 1px solid #3d3d1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-box .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .comparison-box .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .comparison-box .side {
+            text-align: center;
+        }
+
+        .comparison-box .label {
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .comparison-box .description {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #1a2e1a 0%, #1e3f1e 100%);
+            border-color: #2a4a2a;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #8ba78b;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+            background: linear-gradient(135deg, #0f1a1a 0%, #1a2f2f 100%);
+            border-color: #2a4a4a;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+            .comparison-box .vs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">LaunchMate Tool Deep Dive</p>
+            <h1 class="page-title">The Neal Test Tool</h1>
+            <p class="subtitle">Validation before building</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 1: What It Is -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Tool</p>
+            <h2 class="page-title">What is the Neal Test?</h2>
+            <div class="page-content">
+                <p>The Neal Test has <span class="highlight">two non-negotiable requirements:</span></p>
+                <div class="formula-box">
+                    <div class="title">The Formula</div>
+                    <div class="formula">Manual Service Delivery<br>+<br>Customer Payment<br>=<br>Real Validation</div>
+                </div>
+                <p>You <span class="decision">personally deliver the service</span> your product would automate. No technology. No automation. Just you doing the work.</p>
+                <p>And they <span class="decision">pay you</span> for it.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/7</span>
+        </div>
+    </section>
+
+    <!-- Page 2: The Problem -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Problem</p>
+            <h2 class="page-title">Why founders avoid this</h2>
+            <div class="page-content">
+                <p>I built this tool because founders kept doing the same thing: <span class="tension">building features for months without talking to users.</span></p>
+                <p>When I'd say "just manually deliver the service first," they'd respond with:</p>
+                <ul>
+                    <li><span class="tension">"But how exactly do I do that?"</span></li>
+                    <li><span class="tension">"That sounds vague and hard"</span></li>
+                    <li><span class="tension">"I don't know where to start"</span></li>
+                </ul>
+                <p>The <span class="decision">Neal Test was too abstract.</span> Founders needed concrete scenarios with specific steps.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/7</span>
+        </div>
+    </section>
+
+    <!-- Page 3: How It Works -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Solution</p>
+            <h2 class="page-title">How the tool works</h2>
+            <div class="page-content">
+                <p>You give the tool <span class="highlight">two inputs:</span></p>
+                <ol style="margin: 1em 0; padding-left: 1.5em;">
+                    <li><span class="highlight">Startup description</span> - What you're building, who it's for, what problem you're solving</li>
+                    <li><span class="highlight">Current product idea</span> - The specific thing you're considering building</li>
+                </ol>
+                <p>The tool analyzes your inputs and generates <span class="decision">5 fully customized Neal Test scenarios</span> with:</p>
+                <ul>
+                    <li>Exact pitch scripts you can copy-paste</li>
+                    <li>Daily routines with specific time blocks</li>
+                    <li>Pricing suggestions based on your service type</li>
+                    <li>Where to find your target customers</li>
+                    <li>Success metrics for each scenario</li>
+                </ul>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/7</span>
+        </div>
+    </section>
+
+    <!-- Page 4: The 5 Scenarios -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Output</p>
+            <h2 class="page-title">5 personalized scenarios</h2>
+            <div class="scenario-grid">
+                <div class="scenario-card" onclick="highlightScenario(this)">
+                    <div class="number">SCENARIO 1</div>
+                    <div class="name">Daily Manual Service</div>
+                    <div class="description">Become the human version of your product for a week</div>
+                </div>
+                <div class="scenario-card" onclick="highlightScenario(this)">
+                    <div class="number">SCENARIO 2</div>
+                    <div class="name">On-Call Service</div>
+                    <div class="description">Be their personal assistant with 30-min response time</div>
+                </div>
+                <div class="scenario-card" onclick="highlightScenario(this)">
+                    <div class="number">SCENARIO 3</div>
+                    <div class="name">Pre-Sell Then Deliver</div>
+                    <div class="description">Take payment first, figure out delivery after</div>
+                </div>
+                <div class="scenario-card" onclick="highlightScenario(this)">
+                    <div class="number">SCENARIO 4</div>
+                    <div class="name">Deep Dive Pilot</div>
+                    <div class="description">Go all-in with 1-2 power users for a week</div>
+                </div>
+                <div class="scenario-card" onclick="highlightScenario(this)">
+                    <div class="number">SCENARIO 5</div>
+                    <div class="name">Pop-Up Service Event</div>
+                    <div class="description">Physical location, immediate cash payment</div>
+                </div>
+            </div>
+            <div class="page-content">
+                <p style="margin-top: 1em;">Each scenario is <span class="decision">fully customized</span> to your startup with specific scripts, pricing, and next steps.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/7</span>
+        </div>
+    </section>
+
+    <!-- Page 5: Real Example -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Example Output</p>
+            <h2 class="page-title">What it actually generates</h2>
+            <div class="code-example">
+<span class="prompt">Input:</span> "Accountability tool for startup founders"
+
+<span class="output">Tool generates:</span>
+• YOUR PITCH: "I'll be your personal accountability 
+  coach for $40/week. Text you daily check-ins."
+• DAILY ROUTINE: 
+  - 8-9am: Text check-in questions
+  - 12-1pm: Process responses in spreadsheet
+  - 6-7pm: Send personalized feedback
+• TARGET: 3-5 paying customers by Wednesday
+• WHERE TO FIND THEM: Coworking spaces, startup 
+  meetups, accelerators
+• PAYMENT: Collect $40 upfront via Venmo
+            </div>
+            <div class="page-content">
+                <p>No vague advice. <span class="decision">Concrete, executable steps.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/7</span>
+        </div>
+    </section>
+
+    <!-- Page 6: The Trade-off -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Trade-off</p>
+            <h2 class="page-title">Concrete vs flexible</h2>
+            <div class="comparison-box">
+                <div class="title">Design Decision</div>
+                <div class="vs-grid">
+                    <div class="side">
+                        <div class="label">❌ Generic</div>
+                        <div class="description">"Go talk to users and manually deliver your service"</div>
+                    </div>
+                    <div class="side">
+                        <div class="label">✅ Specific</div>
+                        <div class="description">"Text 5 founders this pitch by Wednesday: '[exact script]'"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content">
+                <p>I chose <span class="decision">specificity over flexibility.</span></p>
+                <p>The tool makes assumptions about your business model, pricing, and customer type. Sometimes it's wrong.</p>
+                <p>But <span class="highlight">a concrete wrong scenario is better than vague right advice.</span> You can adjust specifics. You can't execute vague.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/7</span>
+        </div>
+    </section>
+
+    <!-- Page 7: The Meta-Moment -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">The Pattern</p>
+            <h2 class="page-title">Tools that remove friction</h2>
+            <div class="page-content">
+                <p class="quote">"The Neal Test tool doesn't validate your idea for you. It removes the friction that stops you from validating it yourself."</p>
+                <p style="margin-top: 1.5em;">Before this tool: <span class="tension">"I should probably talk to users... but how?"</span></p>
+                <p>After this tool: <span class="decision">"Here are 5 ways to start today. Pick one."</span></p>
+                <p style="margin-top: 1.5em;">That's the pattern. <span class="highlight">Turn abstract methodology into concrete next steps.</span></p>
+                <p style="margin-top: 1.5em; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">No more excuses. Just action. 🎯</p>
+            </div>
+            <span class="page-number">7/7</span>
+        </div>
+    </section>
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+
+    // Scenario highlighting
+    function highlightScenario(card) {
+        document.querySelectorAll('.scenario-card').forEach(c => {
+            c.style.borderColor = '#2a2a2a';
+            c.style.transform = 'translateY(0)';
+        });
+        card.style.borderColor = '#60a5fa';
+        card.style.transform = 'translateY(-4px)';
+    }
+</script>
+
+</body>
+</html>
