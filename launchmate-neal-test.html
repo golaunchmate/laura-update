@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaunchMate's Neal Test | Eating Our Own Dog Food</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .page-content ul {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .page-content li {
+            margin-bottom: 0.8em;
+            color: #b0b0b0;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .meta-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e2f4f 100%);
+            border: 2px solid #60a5fa;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .meta-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #60a5fa;
+            margin-bottom: 12px;
+        }
+
+        .meta-box .text {
+            font-size: 1.2rem;
+            color: #dbeafe;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .scenario-showcase {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .scenario-showcase .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #60a5fa;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scenario-showcase .name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .scenario-showcase .pitch {
+            background: #1a1a1a;
+            border-left: 3px solid #34d399;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-style: italic;
+            color: #d1fae5;
+            font-size: 0.95rem;
+        }
+
+        .scenario-showcase .detail {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .reality-check {
+            background: #1f1f0f;
+            border: 1px solid #3d3d1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .reality-check .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .reality-check .question {
+            font-size: 1.05rem;
+            color: #fef3c7;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .reality-check .arrow {
+            color: #f97316;
+            font-weight: 600;
+            margin: 0 8px;
+        }
+
+        .reality-check .answer {
+            color: #fde68a;
+            font-size: 0.95rem;
+        }
+
+        .insight-box {
+            background: #0f1f0f;
+            border: 1px solid #1a3d1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .insight-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #34d399;
+            margin-bottom: 12px;
+        }
+
+        .insight-box .text {
+            color: #d1fae5;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2e1a3f 100%);
+            border-color: #60a5fa;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #a5b4fc;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+            background: linear-gradient(135deg, #0f1a1a 0%, #1a2f2f 100%);
+            border-color: #2a4a4a;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">LaunchMate Eats Its Own Dog Food</p>
+            <h1 class="page-title">Running the Neal Test on LaunchMate</h1>
+            <p class="subtitle">What happens when the validation tool validates itself?</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 1: The Irony -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Meta Moment</p>
+            <h2 class="page-title">Wait, should we Neal Test LaunchMate?</h2>
+            <div class="page-content">
+                <p>We built a tool that pushes founders to <span class="highlight">manually validate before building.</span></p>
+                <p>But LaunchMate itself is a <span class="tension">complex AI platform with memory blocks, multi-agent communication, and automated workflows.</span></p>
+                <div class="meta-box">
+                    <div class="label">The Question</div>
+                    <div class="text">"Can we manually deliver what LaunchMate automates? Should we?"</div>
+                </div>
+                <p>So I ran LaunchMate through its own Neal Test tool. <span class="decision">Let's see what it said.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/8</span>
+        </div>
+    </section>
+
+    <!-- Page 2: What We Told The Tool -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Input</p>
+            <h2 class="page-title">What we told the tool</h2>
+            <div class="page-content">
+                <p><span class="highlight">Startup Description:</span></p>
+                <p style="font-size: 0.95rem; color: #9ca3af; font-style: italic; margin-left: 1em;">"LaunchMate is an AI accountability platform for startup founders. It helps founders stay focused on customer validation and momentum through daily check-ins, automated team updates, and AI agents that push founders to talk to users instead of just building features. Target users are student entrepreneurs in accelerator programs."</p>
+                
+                <p style="margin-top: 1.5em;"><span class="highlight">Current Product Idea:</span></p>
+                <p style="font-size: 0.95rem; color: #9ca3af; font-style: italic; margin-left: 1em;">"AI agent platform with memory blocks, tools, and multi-agent communication that automates accountability check-ins, tracks momentum scores, sends Discord notifications to teams, and creates specialized agents for validation workflows."</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/8</span>
+        </div>
+    </section>
+
+    <!-- Page 3: What The Tool Said -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Output</p>
+            <h2 class="page-title">The tool's diagnosis</h2>
+            <div class="page-content">
+                <p>The tool identified our role:</p>
+                <p><span class="decision">"YOU become the accountability coach. No technology. Just you manually doing what your product would automate."</span></p>
+                
+                <p style="margin-top: 1.5em;">It generated <span class="highlight">5 concrete scenarios</span> for manually delivering LaunchMate's value:</p>
+                <ul style="margin-top: 1em;">
+                    <li>Daily Manual Service ($30-50/week)</li>
+                    <li>On-Call Accountability Coach ($30-50/week)</li>
+                    <li>Pre-Sell Then Deliver ($30-50/week)</li>
+                    <li>Deep Dive Pilot ($100-150/week intensive)</li>
+                    <li>Pop-Up Service Event ($15 spot service)</li>
+                </ul>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/8</span>
+        </div>
+    </section>
+
+    <!-- Page 4: Scenario 1 Deep Dive -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Scenario Deep Dive</p>
+            <h2 class="page-title">What "Daily Manual Service" looks like</h2>
+            <div class="scenario-showcase">
+                <div class="title">SCENARIO 1</div>
+                <div class="name">Daily Manual Service</div>
+                <div class="pitch">"I'm testing a service before building the tech. For the next week, I'll be your personal accountability coach. Instead of an app, you get me doing it manually. $30-50/week for 7 days."</div>
+                <div class="detail">
+                    <strong>Daily Routine:</strong><br>
+                    • <strong>8-9am:</strong> Text each founder with check-in questions<br>
+                    • <strong>12-1pm:</strong> Process responses in spreadsheet<br>
+                    • <strong>6-7pm:</strong> Send personalized feedback<br>
+                    • Track time spent per customer in spreadsheet
+                </div>
+            </div>
+            <div class="page-content">
+                <p style="margin-top: 1em;">Target: <span class="highlight">3-5 paying customers by Wednesday</span></p>
+                <p>Where to find them: <span class="decision">Campus library, student center, coworking spaces</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/8</span>
+        </div>
+    </section>
+
+    <!-- Page 5: The Reality Check -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Brutal Truth</p>
+            <h2 class="page-title">What the tool forced us to face</h2>
+            <div class="reality-check">
+                <div class="label">🛑 Reality Checks</div>
+                <div class="question">If you can't get 3 people to pay $30-50/week for manual service...</div>
+                <div class="arrow">→</div>
+                <div class="answer">They won't pay for your automated product either</div>
+                
+                <div class="question" style="margin-top: 1em;">If manual delivery takes you 4+ hours per customer...</div>
+                <div class="arrow">→</div>
+                <div class="answer">Your margins won't work even with automation</div>
+                
+                <div class="question" style="margin-top: 1em;">If customers don't renew for week 2...</div>
+                <div class="arrow">→</div>
+                <div class="answer">They won't stay subscribed to your SaaS</div>
+            </div>
+            <div class="page-content">
+                <p style="margin-top: 1em;"><span class="tension">This is what the tool tells every founder.</span> Now it's telling us.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/8</span>
+        </div>
+    </section>
+
+    <!-- Page 6: What We Actually Did -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Truth</p>
+            <h2 class="page-title">We already did this (without knowing it)</h2>
+            <div class="page-content">
+                <p>Wait. <span class="highlight">We've been running the Neal Test on LaunchMate for months.</span></p>
+                
+                <div class="insight-box">
+                    <div class="label">✅ Manual Service Delivered</div>
+                    <div class="text">
+                        • Laura manually texts founders daily check-ins<br>
+                        • Craig manually sends Loom videos after check-ins<br>
+                        • Michael manually creates specialized agents for founders<br>
+                        • We track momentum scores in spreadsheets (now memory blocks)<br>
+                        • We manually send Discord notifications to teams
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5em;">The automation <span class="decision">came after</span> we proved people valued the manual version.</p>
+                <p>We didn't call it a "Neal Test." <span class="highlight">We just did it.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/8</span>
+        </div>
+    </section>
+
+    <!-- Page 7: The Insight -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Learning</p>
+            <h2 class="page-title">What this reveals about LaunchMate</h2>
+            <div class="page-content">
+                <p><span class="highlight">INSIGHT:</span> LaunchMate's core value isn't the AI architecture—it's the <span class="decision">human accountability and feedback</span> we've been manually delivering all along.</p>
+                
+                <p style="margin-top: 1.5em;">The AI agents, memory blocks, and tools are just <span class="highlight">leverage</span> so we can deliver that human touch at scale.</p>
+                
+                <div class="insight-box" style="margin-top: 1.5em;">
+                    <div class="label">What Founders Actually Pay For</div>
+                    <div class="text">
+                        ✅ Someone who pushes them to talk to users<br>
+                        ✅ Daily check-ins that create momentum<br>
+                        ✅ Feedback that's brutally honest<br>
+                        ✅ Accountability that actually works<br>
+                        <br>
+                        ❌ Not the fancy AI architecture<br>
+                        ❌ Not the memory blocks<br>
+                        ❌ Not the multi-agent communication
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">7/8</span>
+        </div>
+    </section>
+
+    <!-- Page 8: The Verdict -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">The Verdict</p>
+            <h2 class="page-title">Did LaunchMate pass its own test?</h2>
+            <div class="page-content">
+                <p class="quote">"We accidentally ran the Neal Test perfectly: we manually delivered accountability for months, founders paid us (with their time and trust), and only then did we automate it."</p>
+                
+                <p style="margin-top: 1.5em; text-align: left;">The tool forced us to realize: <span class="decision">We're not building an AI platform.</span></p>
+                
+                <p style="text-align: left;">We're building <span class="highlight">scalable human accountability.</span></p>
+                
+                <p style="margin-top: 1.5em; text-align: left;">The technology is just the delivery mechanism.</p>
+                
+                <p style="margin-top: 1.5em; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">Tools that challenge you are the best tools. Even when they challenge themselves. 🎯</p>
+            </div>
+            <span class="page-number">8/8</span>
+        </div>
+    </section>
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
