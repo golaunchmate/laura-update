@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions in Tools | Laura's Architecture Pattern</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .code-block .comment {
+            color: #6b7280;
+        }
+
+        .code-block .keyword {
+            color: #f97316;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .comparison-card {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-2px);
+            border-color: #4a4a4a;
+        }
+
+        .comparison-card.selected {
+            border-color: #60a5fa;
+            background: #0f1520;
+        }
+
+        .comparison-card .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .comparison-card .pros {
+            color: #34d399;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .comparison-card .cons {
+            color: #f97316;
+            font-size: 0.85rem;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e2f4f 100%);
+            border-color: #2a3a5a;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #8ba7cb;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+            background: linear-gradient(135deg, #0f1a1a 0%, #1a2f2f 100%);
+            border-color: #2a4a4a;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">Architecture Pattern</p>
+            <h1 class="page-title">Instructions in Tools vs Memory Blocks</h1>
+            <p class="subtitle">Where should agent instructions live?</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 1: The Question -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Confusion</p>
+            <h2 class="page-title">Where do instructions go?</h2>
+            <div class="page-content">
+                <p>I was building the <span class="highlight">create_tidbit</span> tool and realized: the formatting rules could live in <span class="tension">two different places.</span></p>
+                <p>Option 1: A memory block called <code>&lt;narrative_format&gt;</code> that agents read.</p>
+                <p>Option 2: Inside the tool's docstring itself.</p>
+                <p>But <span class="decision">which one makes sense?</span> And what's the actual difference?</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/7</span>
+        </div>
+    </section>
+
+    <!-- Page 2: Memory Block Approach -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Option 1</p>
+            <h2 class="page-title">Memory Block Approach</h2>
+            <div class="page-content">
+                <p>This is what we do now with <span class="highlight">&lt;narrative_format&gt;</span>.</p>
+                <div class="code-block">
+<span class="comment"># Memory block in agent's context</span>
+<span class="keyword">&lt;narrative_format&gt;</span>
+TONE: Engineer walking through process
+DESIGN: Scroll-snap, dark mode
+COLOR CODING: 
+  - Highlights: #60a5fa (blue)
+  - Decisions: #34d399 (green)
+<span class="keyword">&lt;/narrative_format&gt;</span>
+                </div>
+                <p>The agent <span class="highlight">reads this memory block</span> before calling any tool.</p>
+                <p>Instructions are <span class="decision">shared across all agents</span> that have this memory block attached.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/7</span>
+        </div>
+    </section>
+
+    <!-- Page 3: Tool Docstring Approach -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Option 2</p>
+            <h2 class="page-title">Tool Docstring Approach</h2>
+            <div class="page-content">
+                <p>Instructions live <span class="highlight">inside the tool itself</span> as a docstring.</p>
+                <div class="code-block">
+<span class="keyword">def</span> <span class="function">create_tidbit</span>(...):
+    <span class="string">"""
+    Creates tidbit HTML.
+    
+    TONE: Engineer walking through process
+    COLOR CODING:
+      - Highlights: #60a5fa (blue)
+      - Decisions: #34d399 (green)
+    """</span>
+    <span class="comment"># Tool code here</span>
+                </div>
+                <p>The agent <span class="highlight">reads the docstring</span> when it considers using the tool.</p>
+                <p>Instructions <span class="decision">travel with the tool</span> automatically.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/7</span>
+        </div>
+    </section>
+
+    <!-- Page 4: The Trade-off -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Comparison</p>
+            <h2 class="page-title">Click to compare approaches</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card" onclick="selectCard(this)">
+                    <div class="title">Memory Block</div>
+                    <div class="pros">✅ Easy to update<br>✅ Shared across agents<br>✅ User can see it</div>
+                    <div class="cons">❌ Separate from tool<br>❌ Requires manual attachment<br>❌ Takes context space</div>
+                </div>
+                <div class="comparison-card" onclick="selectCard(this)">
+                    <div class="title">Tool Docstring</div>
+                    <div class="pros">✅ Self-contained<br>✅ Auto-travels with tool<br>✅ One source of truth</div>
+                    <div class="cons">❌ Harder to update<br>❌ User can't easily edit<br>❌ Locked to tool</div>
+                </div>
+            </div>
+            <div class="page-content">
+                <p><span class="decision">Both work.</span> The question is: <span class="highlight">what's changing, and who changes it?</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/7</span>
+        </div>
+    </section>
+
+    <!-- Page 5: Real Example -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Real Example</p>
+            <h2 class="page-title">The create_tidbit tool</h2>
+            <div class="page-content">
+                <p>When I created <span class="highlight">create_tidbit()</span>, I put the instructions <span class="decision">in the docstring</span>.</p>
+                <p>Why? Because:</p>
+                <ul style="margin: 1em 0; padding-left: 1.5em;">
+                    <li>The formatting rules are <span class="highlight">specific to this tool</span></li>
+                    <li>Any agent that attaches the tool gets the instructions <span class="decision">automatically</span></li>
+                    <li>No need for a separate narrative_format memory block</li>
+                </ul>
+                <p>The tool is <span class="decision">self-documenting</span> — it knows how to use itself.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/7</span>
+        </div>
+    </section>
+
+    <!-- Page 6: When to Use Each -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Decision Framework</p>
+            <h2 class="page-title">When to use each approach</h2>
+            <div class="page-content">
+                <p><span class="highlight">Use memory blocks when:</span></p>
+                <ul style="margin: 1em 0; padding-left: 1.5em;">
+                    <li>Instructions apply to <span class="decision">multiple tools</span></li>
+                    <li>Users need to <span class="decision">customize</span> the behavior</li>
+                    <li>Instructions <span class="decision">change frequently</span></li>
+                    <li>You want <span class="decision">shared context</span> across agents</li>
+                </ul>
+                <p style="margin-top: 1.5em;"><span class="highlight">Use tool docstrings when:</span></p>
+                <ul style="margin: 1em 0; padding-left: 1.5em;">
+                    <li>Instructions are <span class="decision">tool-specific</span></li>
+                    <li>You want <span class="decision">portability</span> (tool = instructions)</li>
+                    <li>Format is <span class="decision">stable/standardized</span></li>
+                    <li>You want <span class="decision">one source of truth</span></li>
+                </ul>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/7</span>
+        </div>
+    </section>
+
+    <!-- Page 7: The Meta-Moment -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">The Meta-Moment</p>
+            <h2 class="page-title">This tidbit is the example</h2>
+            <div class="page-content">
+                <p class="quote">"The tidbit you're reading right now was created WITHOUT a narrative_format memory block."</p>
+                <p style="margin-top: 1.5em;">The agent used <span class="highlight">create_tidbit()</span>, which has all the formatting rules built into its docstring.</p>
+                <p>The tool <span class="decision">documented itself</span> — and then used itself to explain itself.</p>
+                <p style="margin-top: 1.5em; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">Self-contained tools for the win. 🎯</p>
+            </div>
+            <span class="page-number">7/7</span>
+        </div>
+    </section>
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+
+    // Comparison card selection
+    function selectCard(card) {
+        document.querySelectorAll('.comparison-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+    }
+</script>
+
+</body>
+</html>
