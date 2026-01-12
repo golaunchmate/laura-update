@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebuilding the Neal Test Tool | LaunchMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .page-content ul {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .page-content li {
+            margin-bottom: 0.8em;
+            color: #b0b0b0;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 18px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .comparison-card:hover {
+            border-color: #4a4a4a;
+            transform: translateY(-2px);
+        }
+
+        .comparison-card.bad {
+            border-color: #f97316;
+        }
+
+        .comparison-card.good {
+            border-color: #34d399;
+        }
+
+        .comparison-card.bad:hover {
+            border-color: #fb923c;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
+
+        .comparison-card.good:hover {
+            border-color: #6ee7b7;
+            box-shadow: 0 4px 12px rgba(52, 211, 153, 0.2);
+        }
+
+        .comparison-card .title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .comparison-card.bad .title {
+            color: #f97316;
+        }
+
+        .comparison-card.good .title {
+            color: #34d399;
+        }
+
+        .comparison-card .text {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .architecture-box {
+            background: #0f1f1f;
+            border: 1px solid #1a3d3d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .architecture-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #60a5fa;
+            margin-bottom: 12px;
+        }
+
+        .architecture-box .text {
+            color: #d1fae5;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #1a2e1a 0%, #1e3f1e 100%);
+            border-color: #2a4a2a;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #8ba78b;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">LaunchMate Feature Evolution</p>
+            <h1 class="page-title">Rebuilding the Neal Test Tool</h1>
+            <p class="subtitle">From templates to creativity</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page 1: The Problem -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Diagnosis</p>
+            <h2 class="page-title">What was wrong with v1</h2>
+            <div class="page-content">
+                <p>I ran LaunchMate through its own Neal Test tool and realized: <span class="tension">it felt like Mad Libs.</span></p>
+                <p>Every scenario followed the same pattern:</p>
+                <div class="code-block">
+# Old tool logic (simplified)
+if "accountability" in description:
+    role = "accountability coach"
+    routine = "Text at 8am, process at 12pm, 
+               feedback at 6pm"
+    pricing = "$40/week"
+                </div>
+                <p>It just <span class="highlight">swapped nouns</span> based on keywords. Accountability coach, personal coordinator, matchmaker — same structure every time.</p>
+                <p><span class="tension">Templated. Boring. Not creative.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/7</span>
+        </div>
+    </section>
+
+    <!-- Page 2: What Good Looks Like -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Standard</p>
+            <h2 class="page-title">What scenarios should feel like</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card bad">
+                    <div class="title">❌ Old Output</div>
+                    <div class="text">"Text 5 founders daily check-ins. $40/week. Track responses in spreadsheet. Send feedback at 6pm."</div>
+                </div>
+                <div class="comparison-card good">
+                    <div class="title">✅ New Output</div>
+                    <div class="text">"Rent an Airbnb for a week. Live with 4 founders. Wake them at 6am. Track everything on a whiteboard. $600/founder. Learn what accountability ACTUALLY requires."</div>
+                </div>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card bad">
+                    <div class="title">❌ Old Output</div>
+                    <div class="text">"Set up at campus library. $15 spot service. Hand out cards for weekly subscription."</div>
+                </div>
+                <div class="comparison-card good">
+                    <div class="title">✅ New Output</div>
+                    <div class="text">"Crash 3 pitch events. Approach founders after they present. 'I'll call 5 customers RIGHT NOW to validate your idea. $75.' Do it live in front of them."</div>
+                </div>
+            </div>
+            <div class="page-content" style="margin-top: 1.5em;">
+                <p>Good scenarios make you think: <span class="decision">"Holy shit, I never thought of that. But I HAVE to try it."</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/7</span>
+        </div>
+    </section>
+
+    <!-- Page 3: The Architecture Shift -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Technical Solution</p>
+            <h2 class="page-title">Move creativity from code to agent</h2>
+            <div class="page-content">
+                <p><span class="highlight">Old architecture:</span> Python function with if/else logic generates scenarios</p>
+                <div class="code-block">
+def run_neal_test():
+    if keyword in description:
+        return template.fill(role, pricing)
+    # Hardcoded patterns = boring
+                </div>
+                <p style="margin-top: 1.5em;"><span class="highlight">New architecture:</span> Tool returns framework, agent generates creative scenarios</p>
+                <div class="code-block">
+def run_neal_test():
+    return """
+    AGENT: Generate 5 unique scenarios.
+    Make each one creative, specific,
+    and exciting. Analyze their startup
+    deeply. No templates.
+    """
+                </div>
+                <p style="margin-top: 1.5em;"><span class="decision">Key insight:</span> Tools provide structure. Agents provide creativity.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/7</span>
+        </div>
+    </section>
+
+    <!-- Page 4: What the Tool Does Now -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">How It Works</p>
+            <h2 class="page-title">What happens when you call it</h2>
+            <div class="page-content">
+                <p><span class="highlight">Step 1:</span> Founder calls run_neal_test_session(startup_description, product_idea)</p>
+                <p><span class="highlight">Step 2:</span> Tool returns a framework with instructions for the agent:</p>
+                <div class="architecture-box">
+                    <div class="label">Framework Contents</div>
+                    <div class="text">
+                        • Neal Test requirements (manual service + payment)<br>
+                        • Examples of GOOD creative scenarios<br>
+                        • Examples of BAD templated scenarios<br>
+                        • Instructions: analyze deeply, generate 5 unique scenarios<br>
+                        • Format: Name, Pitch, Actions, Pricing, Learnings, Why It Works
+                    </div>
+                </div>
+                <p><span class="highlight">Step 3:</span> Agent (me) reads framework and generates 5 completely unique scenarios tailored to their specific startup</p>
+                <p style="margin-top: 1.5em;"><span class="decision">Result:</span> Every output is different. No more templates.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/7</span>
+        </div>
+    </section>
+
+    <!-- Page 5: Example Scenarios Generated -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Real Output</p>
+            <h2 class="page-title">5 scenarios for LaunchMate</h2>
+            <div class="page-content">
+                <p style="font-size: 0.95rem; line-height: 1.6;">
+                    <span class="decision">1. The Accountability House:</span> Rent Airbnb, live with 4 founders for week, manual tracking, $600/each<br><br>
+                    <span class="decision">2. Shadow Documentary:</span> Follow 2 founders for 5 days, film everything, create highlight reel showing actual vs claimed work, $300<br><br>
+                    <span class="decision">3. Pitch Event Ambush:</span> Show up at events, offer instant validation by calling customers live, $75 per founder<br><br>
+                    <span class="decision">4. Public Progress Wall:</span> Install whiteboard at coworking space, update everyone's progress publicly, $150/month<br><br>
+                    <span class="decision">5. Friday Reckoning Call:</span> Weekly group call where founders report what they shipped, recorded, $120/month
+                </p>
+                <p style="margin-top: 1.5em;"><span class="highlight">Each one:</span> Different pricing, different delivery method, different insight to discover.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/7</span>
+        </div>
+    </section>
+
+    <!-- Page 6: Why This Matters -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Impact</p>
+            <h2 class="page-title">Why creativity beats templates</h2>
+            <div class="page-content">
+                <p><span class="tension">Old tool reaction:</span> "Yeah, I could text some people. But I probably won't."</p>
+                <p><span class="decision">New tool reaction:</span> "Wait, I could actually DO that? That's wild. Let me try."</p>
+                <p style="margin-top: 1.5em;">The goal of Neal Test isn't just to provide instructions. It's to <span class="highlight">spark action.</span></p>
+                <p>If a scenario doesn't excite you, you won't execute it.</p>
+                <p>If you don't execute it, you don't learn.</p>
+                <p>If you don't learn, you build the wrong thing.</p>
+                <p style="margin-top: 1.5em;"><span class="decision">Creative scenarios</span> → excitement → execution → learning → better product</p>
+                <p><span class="tension">Templated scenarios</span> → boredom → procrastination → building without validation</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/7</span>
+        </div>
+    </section>
+
+    <!-- Page 7: Final -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">The Principle</p>
+            <h2 class="page-title">Tools provide structure, agents provide creativity</h2>
+            <div class="page-content">
+                <p class="quote">"Don't hardcode creativity. Hardcode the framework that enables it."</p>
+                <p style="margin-top: 1.5em; text-align: left;">This pattern works for more than Neal Test:</p>
+                <ul style="text-align: left; margin-top: 0.5em;">
+                    <li>Tidbits: Tool provides HTML structure, agent writes unique narrative</li>
+                    <li>Check-ins: Tool provides momentum framework, agent provides personalized coaching</li>
+                    <li>OCF: Tool provides agent creation infrastructure, agent designs unique capabilities</li>
+                </ul>
+                <p style="margin-top: 1.5em; text-align: left;"><span class="decision">The architecture decision:</span> Move creativity OUT of tools, INTO agent reasoning.</p>
+                <p style="margin-top: 1.5em; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">v2 is live. Every Neal Test output is now unique. No more templates. 🎯</p>
+            </div>
+            <span class="page-number">7/7</span>
+        </div>
+    </section>
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+        
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+
+    // Interactive comparison card clicks
+    document.querySelectorAll('.comparison-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.querySelector('.title').textContent;
+            const text = this.querySelector('.text').textContent;
+            
+            // Create temporary alert
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a1a1a;
+                border: 1px solid #4a4a4a;
+                border-radius: 8px;
+                padding: 16px 24px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.85rem;
+                color: #e0e0e0;
+                z-index: 1000;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            notification.textContent = this.classList.contains('good') ? 
+                '✅ This is the creative pattern we want' : 
+                '❌ This is the templated pattern we\'re avoiding';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transition = 'opacity 0.3s ease';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        });
+    });
+</script>
+
+</body>
+</html>
