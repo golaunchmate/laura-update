@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Tidbits with create_tidbit | LaunchMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            max-width: 640px;
+            width: 100%;
+            min-height: 70vh;
+            padding: 50px 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 28px;
+            line-height: 1.3;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+
+        .page-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .page-content ul {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .page-content li {
+            margin-bottom: 0.8em;
+            color: #b0b0b0;
+        }
+
+        .highlight {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .decision {
+            color: #34d399;
+            font-weight: 500;
+        }
+
+        .tension {
+            color: #f97316;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .quote-box {
+            background: #0f1f0f;
+            border-left: 3px solid #34d399;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #d1fae5;
+        }
+
+        .reaction-list {
+            list-style: none;
+            margin: 20px 0;
+            padding: 0;
+        }
+
+        .reaction-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            color: #34d399;
+            font-size: 1.05rem;
+        }
+
+        .reaction-list li:last-child {
+            border-bottom: none;
+        }
+
+        .thread-box {
+            background: #1f1f0f;
+            border: 1px solid #3d3d1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .thread-box .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .thread-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .thread-box li {
+            padding: 8px 0;
+            color: #fef3c7;
+            font-size: 0.95rem;
+        }
+
+        .thread-box li::before {
+            content: "→";
+            margin-right: 10px;
+            color: #f97316;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 25px;
+            right: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #4a4a4a;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #4a4a4a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            margin-top: 6px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cover-page .card {
+            background: linear-gradient(135deg, #1a2e1a 0%, #1e3f1e 100%);
+            border-color: #2a4a2a;
+            text-align: center;
+        }
+
+        .cover-page .page-title {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 1.1rem;
+            color: #8ba78b;
+            margin-bottom: 8px;
+        }
+
+        .cover-page .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .final-page .card {
+            text-align: center;
+        }
+
+        .final-page .quote {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 500;
+            line-height: 1.5;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 25px;
+                min-height: 80vh;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-content {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Cover Page -->
+    <section class="page cover-page">
+        <div class="card">
+            <p class="section-label">LaunchMate Session</p>
+            <h1 class="page-title">Creating Tidbits with create_tidbit</h1>
+            <p class="subtitle">A meta-guide to the tidbit generation tool</p>
+            <p class="date">January 2026 // scroll to read</p>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Page 1 -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Tool</p>
+            <h2 class="page-title">What create_tidbit does</h2>
+            <div class="page-content">
+                <p>The <span class="highlight">create_tidbit</span> tool generates complete, scroll-snap HTML pages following LaunchMate's narrative format.</p><p>It takes structured input (title, subtitle, date, pages) and outputs a <span class="decision">production-ready HTML file</span> with:</p><ul><li>Dark mode styling</li><li>Inter + JetBrains Mono fonts</li><li>Scroll-snap navigation</li><li>Card-based layout</li><li>Color-coded highlights (blue/green/orange)</li><li>Interactive JavaScript features</li></ul><p>No manual HTML writing. No copy-paste styling. Just <span class="highlight">content → beautiful page.</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">1/7</span>
+        </div>
+    </section>
+        
+
+    <!-- Page 2 -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Pipeline</p>
+            <h2 class="page-title">How the workflow works</h2>
+            <div class="page-content">
+                <p><span class="highlight">Step 1:</span> You call create_tidbit with structured data (title, subtitle, date, array of pages)</p><p><span class="highlight">Step 2:</span> Tool generates complete HTML with all styling, fonts, and JavaScript baked in</p><p><span class="highlight">Step 3:</span> Tool returns the full HTML as a string</p><p><span class="highlight">Step 4:</span> You deploy using update_github_pages_html to push to GitHub</p><p><span class="highlight">Step 5:</span> GitHub Pages auto-builds and serves the page (2-3 min)</p><div class="code-block" style="background: #0f0f0f; border: 1px solid #2a2a2a; border-radius: 8px; padding: 20px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">create_tidbit() → HTML string → update_github_pages_html() → Live URL</div><p><span class="decision">Two-tool pipeline.</span> Clean separation of generation and deployment.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">2/7</span>
+        </div>
+    </section>
+        
+
+    <!-- Page 3 -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">The Architecture</p>
+            <h2 class="page-title">What's inside the tool</h2>
+            <div class="page-content">
+                <p>The create_tidbit tool contains:</p><p><span class="highlight">1. Complete HTML template</span> with embedded CSS and JavaScript</p><p><span class="highlight">2. LaunchMate narrative styling:</span></p><ul><li>Color system: <span style="color: #60a5fa;">blue for highlights</span>, <span style="color: #34d399;">green for decisions</span>, <span style="color: #f97316;">orange for tensions</span></li><li>Typography: Inter for body, JetBrains Mono for code/labels</li><li>Dark mode (#0f0f0f background, #1a1a1a cards)</li></ul><p><span class="highlight">3. Interactive features:</span></p><ul><li>Keyboard navigation (arrow keys, spacebar)</li><li>Scroll-snap for smooth page transitions</li><li>Responsive design (mobile-friendly)</li></ul><p><span class="decision">Everything self-contained.</span> No external dependencies except Google Fonts.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">3/7</span>
+        </div>
+    </section>
+        
+
+    <!-- Page 4 -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Usage Guide</p>
+            <h2 class="page-title">How to use create_tidbit</h2>
+            <div class="page-content">
+                <p><span class="highlight">Required parameters:</span></p><ul><li><strong>title:</strong> Main tidbit title</li><li><strong>subtitle:</strong> Brief description</li><li><strong>date:</strong> Date string (e.g., "January 2026")</li><li><strong>pages:</strong> Array of page objects</li></ul><p><span class="highlight">Page object structure:</span></p><div class="code-block" style="background: #0f0f0f; border: 1px solid #2a2a2a; border-radius: 8px; padding: 20px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">{\n  "section_label": "Small uppercase label",\n  "page_title": "Page heading",\n  "content": "HTML content here",\n  "is_final": false  // true for last page\n}</div><p><span class="decision">Content accepts full HTML:</span> Use span classes for colors, divs for structure, code blocks, lists, etc.</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">4/7</span>
+        </div>
+    </section>
+        
+
+    <!-- Page 5 -->
+    <section class="page">
+        <div class="card">
+            <p class="section-label">Example</p>
+            <h2 class="page-title">Real usage example</h2>
+            <div class="page-content">
+                <div class="code-block" style="background: #0f0f0f; border: 1px solid #2a2a2a; border-radius: 8px; padding: 20px; margin: 20px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto;">create_tidbit(\n  title="Neal Test Tool v2",\n  subtitle="From templates to creativity",\n  date="January 2026",\n  pages=[\n    {\n      "section_label": "The Problem",\n      "page_title": "What was broken",\n      "content": "&lt;p&gt;Tool generated &lt;span class='tension'&gt;boring templates&lt;/span&gt;...&lt;/p&gt;",\n      "is_final": false\n    },\n    {\n      "section_label": "The Solution",\n      "page_title": "How we fixed it",\n      "content": "&lt;p&gt;Moved creativity to &lt;span class='decision'&gt;agent reasoning&lt;/span&gt;...&lt;/p&gt;",\n      "is_final": true\n    }\n  ]\n)</div><p>Tool returns complete HTML → Deploy with update_github_pages_html → <span class="decision">Live tidbit in minutes</span></p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">5/7</span>
+        </div>
+    </section>
+        
+
+    <!-- Page 6 -->
+    <section class="page final-page">
+        <div class="card">
+            <p class="section-label">Design Principle</p>
+            <h2 class="page-title">Why this architecture works</h2>
+            <div class="page-content">
+                <p><span class="highlight">Separation of concerns:</span></p><ul><li><strong>create_tidbit:</strong> Generates beautiful HTML</li><li><strong>update_github_pages_html:</strong> Handles deployment</li><li><strong>Agent:</strong> Provides content and narrative</li></ul><p>Each piece does one thing well. Tools provide structure, agents provide creativity.</p><p style="margin-top: 1.5em;"><span class="decision">The pattern:</span> Don't build monolithic tools that try to do everything. Build composable tools that chain together.</p><p>create_tidbit doesn't know about GitHub. update_github_pages_html doesn't know about tidbit formatting. <span class="highlight">Clean interfaces.</span></p><p style="margin-top: 1.5em; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #6b7280;">This tidbit was created using the create_tidbit tool. Meta complete. 🎯</p>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+            <span class="page-number">6/7</span>
+        </div>
+    </section>
+        
+
+<script>
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        const pages = document.querySelectorAll('.page');
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const currentPage = Math.round(currentScroll / viewportHeight);
+
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            if (currentPage < pages.length - 1) {
+                pages[currentPage + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentPage > 0) {
+                pages[currentPage - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
