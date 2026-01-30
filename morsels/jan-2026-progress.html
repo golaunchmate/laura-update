@@ -5,126 +5,175 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Laura Jan 2026</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#e0e0e0;overflow:hidden;height:100vh}
-.tabs{position:fixed;top:0;left:0;right:0;display:flex;background:#111;border-bottom:1px solid #2a2a2a;z-index:100}.tab{padding:14px 20px;font-size:.8rem;color:#666;cursor:pointer;border-bottom:2px solid transparent}.tab:hover{color:#999}.tab.on{color:#34d399;border-color:#34d399}
-.wrap{display:flex;height:100vh;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-top:48px}.wrap::-webkit-scrollbar{display:none}
-.s{min-width:100vw;height:calc(100vh - 48px);scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:40px}
-.sc{max-width:900px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}.sc.c{grid-template-columns:1fr;text-align:center}
-.lb{font-family:monospace;font-size:.7rem;color:#666;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
-.t{font-size:2.2rem;font-weight:700;color:#fff;line-height:1.2;margin-bottom:20px}.tx{font-size:1.05rem;line-height:1.7;color:#a0a0a0}.tx p{margin-bottom:.8em}
-.hi{color:#60a5fa;font-weight:500}.ok{color:#34d399;font-weight:500}.no{color:#f97316;font-weight:500}
-.vb{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:30px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.vb.gr{background:linear-gradient(135deg,#0f1f0f,#1a3d1a);border-color:#2a4a2a}.vb.or{background:linear-gradient(135deg,#1f1a0f,#3d2a1a);border-color:#4a3a2a}.vb.bl{background:linear-gradient(135deg,#0f1a1f,#1a2a3d);border-color:#2a3a4a}
-.bn{font-family:monospace;font-size:3.5rem;font-weight:700;color:#34d399}.bl{font-size:.9rem;color:#666;margin-top:8px}
-.tl{display:flex;flex-direction:column;gap:14px}.ti{display:flex;gap:14px;align-items:flex-start}.td{width:10px;height:10px;background:#34d399;border-radius:50%;margin-top:5px;flex-shrink:0}.td.or{background:#f97316}.td.bl{background:#60a5fa}
-.tc{flex:1}.tc span{font-family:monospace;font-size:.7rem;color:#666}.tc b{display:block;color:#fff;margin:3px 0;font-weight:600}.tc i{font-style:normal;font-size:.85rem;color:#888}
-.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}.sb{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:20px;text-align:center}.sn{font-family:monospace;font-size:1.8rem;font-weight:600;color:#60a5fa}.sl{font-size:.8rem;color:#666;margin-top:6px}
-.cv .t{font-size:3rem;background:linear-gradient(135deg,#34d399,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.cv .tx{color:#666;font-size:1.1rem}
-.fl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin:20px 0}.fb{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:12px 18px;font-size:.85rem}.fb.gr{border-color:#34d399;color:#34d399}.fa{color:#444}
-.nav{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:100}.nb{background:#1a1a1a;border:1px solid #2a2a2a;color:#e0e0e0;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:.85rem}.nb:hover{background:#2a2a2a}
-.ct{position:fixed;bottom:34px;right:30px;font-family:monospace;font-size:.8rem;color:#444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#fff;color:#1a1a1a;overflow:hidden;height:100vh}
+.tabs{position:fixed;top:0;left:0;right:0;display:flex;background:#f8f8f8;border-bottom:1px solid #e0e0e0;z-index:100;padding:0 40px}
+.tab{padding:16px 24px;font-size:.85rem;color:#888;cursor:pointer;font-weight:500}.tab:hover{color:#333}.tab.on{color:#6366f1;border-bottom:3px solid #6366f1}
+.wrap{display:flex;height:100vh;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-top:52px}.wrap::-webkit-scrollbar{display:none}
+.s{min-width:100vw;height:calc(100vh - 52px);scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:60px 80px}
+.s.purple{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.s.blue{background:linear-gradient(135deg,#3b82f6,#06b6d4)}
+.s.green{background:linear-gradient(135deg,#10b981,#34d399)}
+.s.orange{background:linear-gradient(135deg,#f97316,#fb923c)}
+.s.pink{background:linear-gradient(135deg,#ec4899,#f472b6)}
+.s.dark{background:#1a1a2e;color:#fff}
+.s.gray{background:#f1f5f9}
+.white{color:#fff}
+.sc{max-width:1100px;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center}
+.sc.center{align-items:center;text-align:center}
+.sc.split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.lb{font-size:.9rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;opacity:.7;margin-bottom:20px}
+.t{font-size:4rem;font-weight:800;line-height:1.1;margin-bottom:24px}
+.t.huge{font-size:5.5rem}
+.sub{font-size:1.5rem;opacity:.8;font-weight:400}
+.icon{font-size:8rem;margin-bottom:30px}
+.card{background:#fff;border-radius:24px;padding:50px;box-shadow:0 25px 80px rgba(0,0,0,.15)}
+.card.dark{background:#1a1a2e;color:#fff}
+.num{font-size:7rem;font-weight:800;line-height:1}
+.num-label{font-size:1.2rem;opacity:.6;margin-top:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;width:100%}
+.stat{background:#fff;border-radius:20px;padding:40px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.1)}
+.stat .num{font-size:4rem;color:#6366f1}
+.stat .num-label{color:#666}
+.timeline{display:flex;gap:40px;align-items:flex-start}
+.tbox{flex:1;background:#fff;border-radius:20px;padding:30px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.1)}
+.tbox.err{border:3px solid #ef4444}
+.tbox.ok{border:3px solid #10b981}
+.tbox .em{font-size:3rem;margin-bottom:12px}
+.tbox h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.tbox p{font-size:.9rem;color:#666}
+.arrow{font-size:2rem;color:#ccc;margin-top:40px}
+.flow{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center}
+.fbox{background:#fff;border-radius:16px;padding:24px 32px;font-weight:600;font-size:1.1rem;box-shadow:0 8px 30px rgba(0,0,0,.1)}
+.fbox.hl{background:#10b981;color:#fff}
+.fa{font-size:1.5rem;color:#ccc}
+.bullets{font-size:1.8rem;line-height:2.2;text-align:left}
+.bullets span{opacity:.5;margin-right:16px}
+.nav{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:100}
+.nb{background:#1a1a1a;border:none;color:#fff;padding:14px 28px;border-radius:50px;cursor:pointer;font-size:.9rem;font-weight:600}.nb:hover{background:#333}
+.ct{position:fixed;bottom:44px;right:50px;font-size:1rem;color:#999;font-weight:600}
+.cred{position:fixed;bottom:44px;left:50px;font-size:.85rem;color:#999}
 </style>
 </head>
 <body>
 <div class="tabs">
 <div class="tab on" onclick="go(0)">Overview</div>
-<div class="tab" onclick="go(1)">Tidbits</div>
-<div class="tab" onclick="go(4)">404 UX</div>
-<div class="tab" onclick="go(6)">Insights</div>
-<div class="tab" onclick="go(7)">Next</div>
+<div class="tab" onclick="go(2)">Problem</div>
+<div class="tab" onclick="go(4)">Solution</div>
+<div class="tab" onclick="go(6)">404 Ship</div>
+<div class="tab" onclick="go(8)">Next</div>
 </div>
 <div class="wrap" id="w">
-<section class="s cv"><div class="sc c">
+
+<section class="s purple"><div class="sc center white">
 <div class="lb">LaunchMate Morsel</div>
-<h1 class="t">Two Weeks of Building</h1>
-<p class="tx">Tidbits, Tools & Infrastructure<br>Laura • Jan 13-27, 2026</p>
+<h1 class="t huge">Two Weeks<br>of Building</h1>
+<p class="sub">Jan 13–27, 2026</p>
 </div></section>
-<section class="s"><div class="sc">
-<div><div class="lb">The Challenge</div>
-<h2 class="t">Agents create content. <span class="no">Where does it live?</span></h2>
-<div class="tx"><p>LaunchMate agents generate insights constantly. But they disappear into chat history.</p>
-<p>We needed a way to <span class="hi">persist and share</span> agent content.</p></div></div>
-<div class="vb or"><div style="font-family:monospace;font-size:.8rem;text-align:left">
-<div style="color:#666">// The old way</div>
-<div>agent.send(<span class="ok">"Here's your summary..."</span>)</div>
-<div style="color:#666">// 📜 Lost in scroll</div>
-<div style="color:#666">// 🔍 Can't share</div>
-</div></div>
+
+<section class="s gray"><div class="sc center">
+<div class="icon">🏗️</div>
+<h1 class="t">What We Shipped</h1>
+<p class="sub">Tidbits • Tools • Infrastructure</p>
 </div></section>
-<section class="s"><div class="sc">
-<div class="vb gr"><div class="bn">create_tidbit</div><div class="bl">One tool to generate shareable pages</div></div>
-<div><div class="lb">The Solution</div>
-<h2 class="t">Tidbits: <span class="ok">Shareable artifacts</span></h2>
-<div class="tx"><p>A tool that generates scroll-snap HTML from structured content.</p>
-<p>Dark mode. Mobile-friendly. Deploys to GitHub Pages.</p></div></div>
+
+<section class="s blue"><div class="sc center white">
+<div class="icon">😤</div>
+<h1 class="t">The Problem</h1>
+<p class="sub">Agent content disappears into chat</p>
 </div></section>
-<section class="s"><div class="sc">
-<div><div class="lb">The Build</div>
-<h2 class="t">Three versions. <span class="no">One corrupted.</span></h2>
-<div class="tx"><p>We hit a Letta bug: optional params broke tool execution entirely.</p></div></div>
-<div class="tl">
-<div class="ti"><div class="td"></div><div class="tc"><span>v1</span><b>create_tidbit</b><i>Worked until we added metadata. Corrupted.</i></div></div>
-<div class="ti"><div class="td or"></div><div class="tc"><span>v2</span><b>create_tidbit2</b><i>Minimal test. Proved fresh tools work.</i></div></div>
-<div class="ti"><div class="td bl"></div><div class="tc"><span>v3</span><b>create_tidbit3</b><i>Full features + custom_js. Production ready!</i></div></div>
-</div>
-</div></section>
-<section class="s"><div class="sc">
-<div><div class="lb">The Ship</div>
-<h2 class="t">Custom 404: <span class="ok">Waiting done right</span></h2>
-<div class="tx"><p>Problem: GitHub Pages takes time to deploy. Users see scary 404 errors.</p>
-<p>Solution: Friendly loading screen that <span class="hi">auto-refreshes</span> when ready.</p>
-<p style="color:#666;font-size:.9rem">💡 Michael spotted the UX problem</p></div></div>
-<div class="vb bl">
-<div class="fl"><div class="fb">User clicks link</div><div class="fa">→</div><div class="fb">Page not ready</div><div class="fa">→</div><div class="fb gr">Loading screen</div><div class="fa">→</div><div class="fb gr">Auto-refresh!</div></div>
-<div style="color:#666;font-size:.8rem;margin-top:16px">Polls every 5 seconds via fetch HEAD request</div>
-</div>
-</div></section>
-<section class="s"><div class="sc c">
-<div class="lb">Infrastructure</div>
-<h2 class="t">What got built</h2>
-<div class="sg">
-<div class="sb"><div class="sn">3</div><div class="sl">Tool versions</div></div>
-<div class="sb"><div class="sn">24</div><div class="sl">Tidbits in dashboard</div></div>
-<div class="sb"><div class="sn">6</div><div class="sl">Categories</div></div>
-<div class="sb"><div class="sn">1</div><div class="sl">Custom 404</div></div>
-<div class="sb"><div class="sn">1</div><div class="sl">GitHub org</div></div>
-<div class="sb"><div class="sn">∞</div><div class="sl">Morsels possible</div></div>
-</div>
-</div></section>
-<section class="s"><div class="sc">
-<div><div class="lb">Key Insight</div>
-<h2 class="t">Letta kwargs bug: <span class="no">optional params don't work</span></h2>
-<div class="tx"><p>Editing tools can corrupt them. Fresh tools work fine.</p>
-<p>Workaround: Make params required, or create new tools.</p>
-<p><span class="ok">Asked on Letta Discord</span> — waiting for fix.</p></div></div>
-<div class="vb or">
-<div style="font-family:monospace;font-size:.85rem">
-<div style="color:#f97316">NameError: name 'title' is not defined</div>
-<div style="color:#666;margin-top:12px">// Even required params broke after edits</div>
-<div style="color:#666">// Solution: create fresh tool</div>
+
+<section class="s gray"><div class="sc split">
+<div>
+<h1 class="t">Lost in Scroll</h1>
+<div class="bullets">
+<p><span>📜</span> Insights buried in history</p>
+<p><span>🔍</span> Can't share with team</p>
+<p><span>⏰</span> Gone by tomorrow</p>
 </div>
 </div>
+<div class="card dark" style="font-family:monospace;font-size:1.1rem;line-height:2">
+<div style="opacity:.5">// The old way</div>
+<div>agent.send(<span style="color:#34d399">"Summary..."</span>)</div>
+<div style="opacity:.5">// Where does it go? 🤷</div>
+</div>
 </div></section>
-<section class="s"><div class="sc c">
+
+<section class="s green"><div class="sc center white">
+<div class="icon">✨</div>
+<h1 class="t">The Solution</h1>
+<p class="sub">create_tidbit → Shareable HTML pages</p>
+</div></section>
+
+<section class="s gray"><div class="sc center">
+<h1 class="t" style="margin-bottom:50px">Three Versions</h1>
+<div class="timeline">
+<div class="tbox err"><div class="em">💀</div><h3>v1: Corrupted</h3><p>Letta kwargs bug broke it</p></div>
+<div class="arrow">→</div>
+<div class="tbox"><div class="em">🧪</div><h3>v2: Test</h3><p>Minimal, proved concept</p></div>
+<div class="arrow">→</div>
+<div class="tbox ok"><div class="em">🚀</div><h3>v3: Production</h3><p>Full features + custom JS</p></div>
+</div>
+</div></section>
+
+<section class="s orange"><div class="sc center white">
+<div class="icon">🚨</div>
+<h1 class="t">404 Problem</h1>
+<p class="sub">GitHub Pages deploy delay confuses users</p>
+</div></section>
+
+<section class="s gray"><div class="sc center">
+<h1 class="t" style="margin-bottom:40px">Smart 404</h1>
+<div class="flow">
+<div class="fbox">Click link</div><div class="fa">→</div>
+<div class="fbox">Not ready yet</div><div class="fa">→</div>
+<div class="fbox hl">Loading screen</div><div class="fa">→</div>
+<div class="fbox hl">Auto-refresh! ✓</div>
+</div>
+<p style="margin-top:40px;color:#666;font-size:1.1rem">Polls every 5 seconds • Michael spotted the UX gap 👀</p>
+</div></section>
+
+<section class="s pink"><div class="sc center white">
+<div class="icon">📊</div>
+<h1 class="t">By the Numbers</h1>
+</div></section>
+
+<section class="s gray"><div class="sc center">
+<div class="grid3">
+<div class="stat"><div class="num">3</div><div class="num-label">Tool versions</div></div>
+<div class="stat"><div class="num">24</div><div class="num-label">Tidbits created</div></div>
+<div class="stat"><div class="num">6</div><div class="num-label">Categories</div></div>
+<div class="stat"><div class="num">1</div><div class="num-label">Custom 404</div></div>
+<div class="stat"><div class="num">1</div><div class="num-label">GitHub org</div></div>
+<div class="stat"><div class="num">∞</div><div class="num-label">Morsels possible</div></div>
+</div>
+</div></section>
+
+<section class="s dark"><div class="sc center white">
 <div class="lb">What's Next</div>
-<h2 class="t">The roadmap</h2>
-<div class="tx" style="max-width:600px;margin:0 auto">
-<p>✅ <span class="ok">create_tidbit3</span> — working with custom JS</p>
-<p>🔜 Add metadata params once Letta fixes kwargs</p>
-<p>🔜 Built-in GitHub deployment</p>
-<p>🔜 Tidbit directory watcher (proactive agents)</p>
-<p>🔜 More morsels!</p>
+<h1 class="t">The Roadmap</h1>
+<div class="bullets" style="margin-top:30px">
+<p><span>✅</span> create_tidbit3 working</p>
+<p><span>🔜</span> Metadata params</p>
+<p><span>🔜</span> Built-in deployment</p>
+<p><span>🔜</span> Directory watcher</p>
 </div>
 </div></section>
+
+<section class="s purple"><div class="sc center white">
+<h1 class="t huge">Questions?</h1>
+</div></section>
+
 </div>
 <div class="nav"><button class="nb" onclick="prev()">← Prev</button><button class="nb" onclick="next()">Next →</button></div>
-<div class="ct" id="ct">1/8</div>
+<div class="ct" id="ct">1/13</div>
+<div class="cred">Laura Wetherhold</div>
 <script>
-const w=document.getElementById('w'),tabs=document.querySelectorAll('.tab');let cur=0;const tot=8;
+const w=document.getElementById('w'),tabs=document.querySelectorAll('.tab'),tot=13;let cur=0;
 function go(n){cur=n;w.children[n].scrollIntoView({behavior:'smooth'});upd()}
 function prev(){if(cur>0)go(cur-1)}
 function next(){if(cur<tot-1)go(cur+1)}
-function upd(){document.getElementById('ct').textContent=(cur+1)+'/'+tot;tabs.forEach((t,i)=>t.classList.toggle('on',parseInt(t.getAttribute('onclick').match(/\d+/)[0])<=cur))}
+function upd(){document.getElementById('ct').textContent=(cur+1)+'/'+tot}
 w.addEventListener('scroll',()=>{cur=Math.round(w.scrollLeft/window.innerWidth);upd()});
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});
 </script>
